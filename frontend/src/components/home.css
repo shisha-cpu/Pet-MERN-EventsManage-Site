@@ -1,0 +1,159 @@
+.home {
+    padding: 20px;
+    color: #e0e0e0;
+  }
+  
+  .home__title {
+    font-size: 32px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #00ffcc;
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.8);
+  }
+  
+  .home__controls {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .home__search-input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    background-color: #222;
+    color: #fff;
+    transition: background-color 0.3s;
+  }
+  
+  .home__search-input:focus {
+    background-color: #333;
+    outline: none;
+  }
+  
+  .home__sort-select {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #222;
+    color: #fff;
+    transition: background-color 0.3s;
+  }
+  
+  .home__sort-select:focus {
+    background-color: #333;
+    outline: none;
+  }
+  
+  .event-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .event-card {
+    background-color: rgba(34, 34, 34, 0.9);
+    padding: 15px;
+    border-radius: 5px;
+    transition: transform 0.3s;
+  }
+  
+  .event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0, 255, 204, 0.5);
+  }
+  
+  .event-card__title {
+    font-size: 24px;
+    color: #00ffcc;
+  }
+  
+  .event-card__date,
+  .event-card__location {
+    margin: 5px 0;
+    color: #aaa;
+  }
+  
+  .event-card__image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+  
+  .event-card__toggle-tasks-button {
+    background-color: #00ffcc;
+    color: #121212;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+  }
+  
+  .event-card__toggle-tasks-button:hover {
+    background-color: #00e0b5;
+  }
+  
+  .event-card__tasks {
+    margin-top: 10px;
+    animation: fadeIn 0.5s;
+  }
+  
+  .event-card__tasks-title {
+    font-size: 20px;
+    color: #00ffcc;
+  }
+  
+  .event-card__tasks-list {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  .event-card__task {
+    background-color: rgba(0, 255, 204, 0.1);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px 0;
+  }
+  
+  .task__description,
+  .task__assigned-to,
+  .task__due-date,
+  .task__status {
+    margin: 5px 0;
+  }
+  
+  .event-card__no-tasks {
+    color: #aaa;
+  }
+  
+  .event-card__delete-button {
+    background-color: #ff4c4c;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .event-card__delete-button:hover {
+    background-color: #ff1a1a;
+  }
+  
+  .home__no-events {
+    text-align: center;
+    color: #aaa;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  

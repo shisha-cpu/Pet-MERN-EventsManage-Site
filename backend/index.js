@@ -32,7 +32,8 @@ const Event = mongoose.model('Event', new mongoose.Schema({
     income: { type: Number, default: 0 },
     expenses: { type: Number, default: 0 },
   },
-  createdBy: { type: String, required: true }, // Добавляем создателя мероприятия
+  createdBy: { type: String, required: true }, 
+  img : {type : String }
 }));
 
 
@@ -84,18 +85,13 @@ app.get('/events', async (req, res) => {
 
 // Создание нового мероприятия
 app.post('/events', async (req, res) => {
-  const { title, date, location, tasks, budget ,createdBy } = req.body;
-  const event = new Event({ title, date, location, tasks, budget ,createdBy});
+  const { title, date, location, tasks, budget ,createdBy,img } = req.body;
+  const event = new Event({ title, date, location, tasks, budget ,createdBy , img});
   await event.save();
   res.status(201).json(event);
 });
 
-// Обновление бюджета мероприятия
-app.put('/events/:id/budget', async (req, res) => {
-  const { income, expenses } = req.body;
-  const event = await Event.findByIdAndUpdate(req.params.id, { budget: { income, expenses } }, { new: true });
-  res.json(event);
-});
+
 
 // Создание задачи для мероприятия
 app.post('/events/:id/tasks', async (req, res) => {
@@ -106,22 +102,9 @@ app.post('/events/:id/tasks', async (req, res) => {
   res.status(201).json(event);
 });
 
-// Обновление статуса задачи
-app.put('/events/:eventId/tasks/:taskId', async (req, res) => {
-  const { completed } = req.body;
-  const event = await Event.findById(req.params.eventId);
-  const task = event.tasks.id(req.params.taskId);
-  if (task) {
-    task.completed = completed;
-    await event.save();
-    res.json(event);
-  } else {
-    res.status(404).send('Task not found');
-  }
-});
-// Удаление мероприятия
+
 app.delete('/events/:id', async (req, res) => {
-  const { userName } = req.body; // Имя текущего пользователя
+  const { userName } = req.body; 
   const event = await Event.findById(req.params.id);
 
   if (!event) {
@@ -129,13 +112,14 @@ app.delete('/events/:id', async (req, res) => {
   }
 
   // Проверяем, имеет ли пользователь права на удаление
-  if (event.createdBy == userName || userName === 'admin') {
-    await event.remove();
+  if (event.createdBy === userName || userName === 'admin') {
+    await Event.deleteOne({ _id: req.params.id });
     res.status(200).send({ message: 'Мероприятие удалено' });
   } else {
     res.status(403).send({ message: `У вас нет прав на удаление этого мероприятия ${event.createdBy}` });
   }
 });
+
 
 // Запуск сервера
 app.listen(PORT, () => {

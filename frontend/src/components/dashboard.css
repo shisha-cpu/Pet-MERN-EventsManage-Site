@@ -1,0 +1,95 @@
+.dashboard {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #1e1e2f;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    color: #f0f0f0;
+  }
+  
+  .dashboard__title {
+    text-align: center;
+    font-size: 24px;
+    color: #00ffcc; /* Цвет заголовка */
+    margin-bottom: 20px;
+  }
+  
+  .dashboard__form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .dashboard__form-group {
+    margin-bottom: 20px;
+  }
+  
+  .dashboard__label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #00ffcc; /* Цвет меток */
+  }
+  
+  .dashboard__input-text,
+  .dashboard__input-date,
+  .dashboard__input-number {
+    padding: 12px;
+    border: 2px solid #00ffcc; /* Цвет границы */
+    border-radius: 10px;
+    background: #282a36; /* Цвет фона поля ввода */
+    color: #f0f0f0;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  
+  .dashboard__input-text:focus,
+  .dashboard__input-date:focus,
+  .dashboard__input-number:focus {
+    border-color: #ff79c6; /* Цвет границы при фокусе */
+    background: #44475a; /* Цвет фона при фокусе */
+    outline: none;
+  }
+  
+  .dashboard__button {
+    padding: 12px 15px;
+    background: linear-gradient(90deg, #ff79c6, #8be9fd);
+    color: #282a36;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s, transform 0.2s;
+  }
+  
+  .dashboard__button:hover {
+    background: linear-gradient(90deg, #ff92d0, #76e4f7);
+    transform: translateY(-2px);
+  }
+  
+  .dashboard__button--add {
+    background: #50fa7b; /* Цвет кнопки добавления */
+    margin-top: 10px;
+  }
+  
+  .dashboard__button--add:hover {
+    background: #4bf28b; /* Цвет кнопки добавления при наведении */
+  }
+  
+  .dashboard__input-text::placeholder,
+  .dashboard__input-date::placeholder,
+  .dashboard__input-number::placeholder {
+    color: #6272a4; /* Цвет текста плейсхолдера */
+  }
+  
+  .dashboard__tasks {
+    margin-top: 10px;
+  }
+  
+  .dashboard__task {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .dashboard__task input {
+    flex: 1;
+  }
+  

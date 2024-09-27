@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'; 
 import { useSelector } from 'react-redux';
-
+import './home.css'
 export default function Home() {
   const [events, setEvents] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(''); // Для поиска мероприятий
-  const [sortOrder, setSortOrder] = useState('dateAsc'); // Для сортировки мероприятий
-  const user = useSelector((state) => state.user.user); // Получаем текущего пользователя
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortOrder, setSortOrder] = useState('dateAsc');
+  const [expandedTasks, setExpandedTasks] = useState({});
+  const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
-    // Загружаем мероприятия с сервера
     const fetchEvents = async () => {
       try {
         const response = await fetch('http://localhost:5000/events');
@@ -32,7 +32,7 @@ export default function Home() {
       const response = await fetch(`http://localhost:5000/events/${id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userName: user.name }) // Передаем имя текущего пользователя
+        body: JSON.stringify({ userName: user.name })
       });
 
       if (response.ok) {
@@ -46,12 +46,10 @@ export default function Home() {
     }
   };
 
-  // Функция для фильтрации мероприятий
   const filteredEvents = events.filter(event =>
     event.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Функция для сортировки мероприятий
   const sortedEvents = filteredEvents.sort((a, b) => {
     if (sortOrder === 'dateAsc') {
       return new Date(a.date) - new Date(b.date);
@@ -65,56 +63,87 @@ export default function Home() {
     return 0;
   });
 
+  const toggleTasks = (eventId) => {
+    setExpandedTasks(prev => ({
+      ...prev,
+      [eventId]: !prev[eventId]
+    }));
+  };
+
   return (
     <div className="home">
-      <h1>Все мероприятия</h1>
-      <input
-        type="text"
-        placeholder="Поиск мероприятий..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
-        <option value="dateAsc">По дате (возрастание)</option>
-        <option value="dateDesc">По дате (убывание)</option>
-        <option value="titleAsc">По названию (A-Z)</option>
-        <option value="titleDesc">По названию (Z-A)</option>
-      </select>
+      <h1 className="home__title">Все мероприятия</h1>
+      <div className="home__controls">
+        <input
+          type="text"
+          className="home__search-input"
+          placeholder="Поиск мероприятий..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <select
+          className="home__sort-select"
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+        >
+          <option value="dateAsc">По дате (возрастание)</option>
+          <option value="dateDesc">По дате (убывание)</option>
+          <option value="titleAsc">По названию (A-Z)</option>
+          <option value="titleDesc">По названию (Z-A)</option>
+        </select>
+      </div>
       {sortedEvents.length > 0 ? (
-        <ul>
+        <div className="event-grid">
           {sortedEvents.map((event) => (
-            <li key={event._id}>
-              <h3>{event.title}</h3>
-              <p>Дата: {new Date(event.date).toLocaleDateString()}</p>
-              <p>Место проведения: {event.location || 'Не указано'}</p>
-              <h4>Задачи:</h4>
-              {event.tasks.length > 0 ? (
-                <ul>
-                  {event.tasks.map((task, index) => (
-                    <li key={index}>
-                      <p>Описание: {task.description}</p>
-                      <p>Ответственный: {task.assignedTo || 'Не указано'}</p>
-                      <p>Срок выполнения: {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Не указано'}</p>
-                      <p>Статус: {task.completed ? 'Выполнено' : 'Не выполнено'}</p>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>Задач нет</p>
+            <div key={event._id} className="event-card">
+              <h3 className="event-card__title">{event.title}</h3>
+              <p className="event-card__date">Дата: {new Date(event.date).toLocaleDateString()}</p>
+              <p className="event-card__location">Место проведения: {event.location || 'Не указано'}</p>
+              <img src={event.img} alt="event" className="event-card__image" />
+              
+              <button
+                className="event-card__toggle-tasks-button"
+                onClick={() => toggleTasks(event._id)}
+              >
+                {expandedTasks[event._id] ? 'Скрыть задачи' : 'Показать задачи'}
+              </button>
+              
+              {expandedTasks[event._id] && (
+                <div className="event-card__tasks">
+                  <h4 className="event-card__tasks-title">Задачи:</h4>
+                  {event.tasks.length > 0 ? (
+                    <ul className="event-card__tasks-list">
+                      {event.tasks.map((task, index) => (
+                        <li key={index} className="event-card__task">
+                          <p className="task__description">Описание: {task.description}</p>
+                          <p className="task__assigned-to">Ответственный: {task.assignedTo || 'Не указано'}</p>
+                          <p className="task__due-date">Срок выполнения: {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Не указано'}</p>
+                          <p className="task__status">Статус: {task.completed ? 'Выполнено' : 'Не выполнено'}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="event-card__no-tasks">Задач нет</p>
+                  )}
+                </div>
               )}
-              <p>Бюджет:</p>
-              <p>Доходы: {event.budget.income}</p>
-              <p>Расходы: {event.budget.expenses}</p>
+              <p className="event-card__budget">Бюджет:</p>
+              <p className="event-card__income">Доходы: {event.budget.income}</p>
+              <p className="event-card__expenses">Расходы: {event.budget.expenses}</p>
 
-              {/* Добавляем кнопку удаления, доступную только для создателя мероприятия или администратора */}
               {user && (event.createdBy === user.name || user.name === 'admin') && (
-                <button onClick={() => deleteEvent(event._id)}>Удалить мероприятие</button>
+                <button
+                  className="event-card__delete-button"
+                  onClick={() => deleteEvent(event._id)}
+                >
+                  Удалить мероприятие
+                </button>
               )}
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
-        <p>Мероприятий нет</p>
+        <p className="home__no-events">Мероприятий нет</p>
       )}
     </div>
   );
