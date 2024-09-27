@@ -1,7 +1,7 @@
 
 .auth-form {
 
-    background-color: #1c1c1c; /* Темный фон формы */
+    background-color: #1c1c1c; 
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
@@ -10,7 +10,7 @@
 }
 
 .auth-title {
-    color: #00ffcc; /* Неоновый цвет заголовка */
+    color: #00ffcc; 
     text-align: center;
     margin-bottom: 20px;
 }
@@ -18,23 +18,23 @@
 .auth-input {
     width: 100%;
     padding: 10px;
-    border: 1px solid #00ffcc; /* Неоновая рамка */
+    border: 1px solid #00ffcc; 
     border-radius: 5px;
-    background-color: #2a2a2a; /* Темный фон для полей ввода */
-    color: #eaeaea; /* Светлый текст */
+    background-color: #2a2a2a; 
+    color: #eaeaea; 
     margin-bottom: 15px;
     transition: border 0.3s;
 }
 
 .auth-input:focus {
-    border-color: #ff00ff; /* Изменение цвета рамки при фокусе */
-    outline: none; /* Убираем обводку */
+    border-color: #ff00ff;
+    outline: none;
 }
 
 .auth-button {
     padding: 10px;
-    background-color: #00ffcc; /* Неоновая кнопка */
-    color: #121212; /* Темный текст на кнопке */
+    background-color: #00ffcc; 
+    color: #121212; 
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -43,6 +43,6 @@
 }
 
 .auth-button:hover {
-    background-color: #ff00ff; /* Изменение цвета кнопки при наведении */
-    transform: scale(1.05); /* Увеличение кнопки при наведении */
+    background-color: #ff00ff;
+    transform: scale(1.05); 
 }

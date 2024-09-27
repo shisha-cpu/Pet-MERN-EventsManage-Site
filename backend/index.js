@@ -7,17 +7,17 @@ import bcrypt from 'bcrypt';
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Подключение к MongoDB
+
 mongoose
   .connect('mongodb+srv://admin:wwwwww@cluster0.weppimj.mongodb.net/123?retryWrites=true&w=majority&appName=Cluster0')
   .then(() => console.log('DB okey'))
   .catch((err) => console.log('db error', err));
 
-// Middleware
+
 app.use(cors());
 app.use(bodyParser.json());
 
-// Модели
+
 const User = mongoose.model('User', new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -37,7 +37,7 @@ const Event = mongoose.model('Event', new mongoose.Schema({
 }));
 
 
-// Регистрация пользователя
+
 app.post('/register', async(req, res) => {
     const { name, password } = req.body;
     try {
@@ -55,7 +55,7 @@ app.post('/register', async(req, res) => {
     }
 });
 
-// Авторизация пользователя
+
 
 app.post('/login', async(req, res) => {
     const { name, password } = req.body;
@@ -77,13 +77,13 @@ app.post('/login', async(req, res) => {
 
 
 
-// Получение всех мероприятий
+
 app.get('/events', async (req, res) => {
   const events = await Event.find();
   res.json(events);
 });
 
-// Создание нового мероприятия
+
 app.post('/events', async (req, res) => {
   const { title, date, location, tasks, budget ,createdBy,img } = req.body;
   const event = new Event({ title, date, location, tasks, budget ,createdBy , img});
@@ -93,7 +93,7 @@ app.post('/events', async (req, res) => {
 
 
 
-// Создание задачи для мероприятия
+
 app.post('/events/:id/tasks', async (req, res) => {
   const { description, assignedTo, dueDate } = req.body;
   const event = await Event.findById(req.params.id);
@@ -111,7 +111,7 @@ app.delete('/events/:id', async (req, res) => {
     return res.status(404).send({ message: 'Мероприятие не найдено' });
   }
 
-  // Проверяем, имеет ли пользователь права на удаление
+
   if (event.createdBy === userName || userName === 'admin') {
     await Event.deleteOne({ _id: req.params.id });
     res.status(200).send({ message: 'Мероприятие удалено' });
@@ -121,7 +121,7 @@ app.delete('/events/:id', async (req, res) => {
 });
 
 
-// Запуск сервера
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
