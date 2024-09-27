@@ -5,14 +5,11 @@ import { deleteUser } from '../store/slices/userSlice';
 export default function Header (){
   const user = useSelector(state => state.user.user)
   const dispatch = useDispatch()
-  if (user){
-    console.log(user);
-    
-  }
+
   return (
     <header>
       <nav>
-   
+        <Link to='/'>Event Manager </Link>
         {!user? <>
           <Link to="/login">Вход</Link>
           <Link to="/register">Регистрация</Link>

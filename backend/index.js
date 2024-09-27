@@ -32,7 +32,9 @@ const Event = mongoose.model('Event', new mongoose.Schema({
     income: { type: Number, default: 0 },
     expenses: { type: Number, default: 0 },
   },
+  createdBy: { type: String, required: true }, // Добавляем создателя мероприятия
 }));
+
 
 // Регистрация пользователя
 app.post('/register', async(req, res) => {
@@ -82,8 +84,8 @@ app.get('/events', async (req, res) => {
 
 // Создание нового мероприятия
 app.post('/events', async (req, res) => {
-  const { title, date, location, tasks, budget } = req.body;
-  const event = new Event({ title, date, location, tasks, budget });
+  const { title, date, location, tasks, budget ,createdBy } = req.body;
+  const event = new Event({ title, date, location, tasks, budget ,createdBy});
   await event.save();
   res.status(201).json(event);
 });
@@ -115,6 +117,23 @@ app.put('/events/:eventId/tasks/:taskId', async (req, res) => {
     res.json(event);
   } else {
     res.status(404).send('Task not found');
+  }
+});
+// Удаление мероприятия
+app.delete('/events/:id', async (req, res) => {
+  const { userName } = req.body; // Имя текущего пользователя
+  const event = await Event.findById(req.params.id);
+
+  if (!event) {
+    return res.status(404).send({ message: 'Мероприятие не найдено' });
+  }
+
+  // Проверяем, имеет ли пользователь права на удаление
+  if (event.createdBy == userName || userName === 'admin') {
+    await event.remove();
+    res.status(200).send({ message: 'Мероприятие удалено' });
+  } else {
+    res.status(403).send({ message: `У вас нет прав на удаление этого мероприятия ${event.createdBy}` });
   }
 });
 

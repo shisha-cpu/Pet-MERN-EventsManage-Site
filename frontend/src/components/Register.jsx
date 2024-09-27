@@ -12,7 +12,7 @@ const dispatch = useDispatch()
     axios.post('http://localhost:5000/register'  , {name  , password})
     .then(res => {
         dispatch(fetchUser(res.data))
-
+        setRedirect(true)
     }
     )
   };
