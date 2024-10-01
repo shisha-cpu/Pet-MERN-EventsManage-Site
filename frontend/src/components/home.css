@@ -157,3 +157,9 @@
     }
   }
   
+
+  @media (max-width:550px) {
+    .home__controls{
+      display: flex;
+    }
+  }

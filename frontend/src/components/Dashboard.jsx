@@ -11,6 +11,7 @@ export default function Dashboard() {
   const [img, setImg] = useState('');
   const [income, setIncome] = useState(0);
   const [expenses, setExpenses] = useState(0);
+  const [eventType, setEventType] = useState('webinar'); // Новое состояние для типа мероприятия
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,6 +23,7 @@ export default function Dashboard() {
       img,
       budget: { income, expenses },
       createdBy: user.name,
+      eventType // Добавляем тип мероприятия
     };
 
     try {
@@ -39,6 +41,7 @@ export default function Dashboard() {
         setTasks([{ description: '', assignedTo: '', dueDate: '' }]);
         setIncome(0);
         setExpenses(0);
+        setEventType('webinar'); // Сброс типа мероприятия
       } else {
         const data = await response.json();
         alert(`Ошибка: ${data.message}`);
@@ -54,6 +57,23 @@ export default function Dashboard() {
       <h1 className="dashboard__title">Личный кабинет пользователя: {user.name}</h1>
       <form onSubmit={handleSubmit} className="dashboard__form">
         <div className="dashboard__form-group">
+          <label className="dashboard__label">Тип мероприятия:</label>
+          <select
+            value={eventType}
+            onChange={(e) => setEventType(e.target.value)}
+            required
+            className="dashboard__select home__sort-select"
+          >
+            <option value="webinar">Вебинар</option>
+            <option value="forum">Форум</option>
+            <option value="conference">Конференция</option>
+            <option value="dinner">Гала-ужин</option>
+            <option value="exhibition">Выставка</option>
+            <option value="training">Тренинг</option>
+          </select>
+        </div>
+
+        <div className="dashboard__form-group">
           <label className="dashboard__label">Название мероприятия:</label>
           <input
             type="text"
@@ -63,6 +83,8 @@ export default function Dashboard() {
             required
           />
         </div>
+
+
         <div className="dashboard__form-group">
           <label className="dashboard__label">Фото:</label>
           <input
@@ -157,6 +179,8 @@ export default function Dashboard() {
           />
         </div>
         <button type="submit" className="dashboard__button">Создать мероприятие</button>
+
+
       </form>
     </div>
   );

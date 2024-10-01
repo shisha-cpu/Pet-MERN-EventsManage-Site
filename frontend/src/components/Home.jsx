@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'; 
 import { useSelector } from 'react-redux';
 import './home.css'
+
 export default function Home() {
   const [events, setEvents] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('dateAsc');
+  const [eventType, setEventType] = useState('all'); // Новое состояние для типа мероприятия
   const [expandedTasks, setExpandedTasks] = useState({});
   const user = useSelector((state) => state.user.user);
 
@@ -46,8 +48,10 @@ export default function Home() {
     }
   };
 
+  // Фильтруем по поисковому запросу и типу мероприятия
   const filteredEvents = events.filter(event =>
-    event.title.toLowerCase().includes(searchTerm.toLowerCase())
+    event.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    (eventType === 'all' || event.eventType === eventType) // Фильтрация по типу
   );
 
   const sortedEvents = filteredEvents.sort((a, b) => {
@@ -91,7 +95,23 @@ export default function Home() {
           <option value="titleAsc">По названию (A-Z)</option>
           <option value="titleDesc">По названию (Z-A)</option>
         </select>
+
+     
+        <select
+          className="home__sort-select"
+          value={eventType}
+          onChange={(e) => setEventType(e.target.value)}
+        >
+          <option value="all">Все типы</option>
+          <option value="webinar">Вебинар</option>
+          <option value="forum">Форум</option>
+          <option value="conference">Конференция</option>
+          <option value="dinner">Гала-ужин</option>
+          <option value="exhibition">Выставка</option>
+          <option value="training">Тренинг</option>
+        </select>
       </div>
+      
       {sortedEvents.length > 0 ? (
         <div className="event-grid">
           {sortedEvents.map((event) => (

@@ -33,9 +33,9 @@ const Event = mongoose.model('Event', new mongoose.Schema({
     expenses: { type: Number, default: 0 },
   },
   createdBy: { type: String, required: true }, 
-  img : {type : String }
+  img: { type: String },
+  eventType: { type: String, required: true, enum: ['webinar', 'forum', 'conference', 'dinner', 'exhibition', 'training'] } // Добавляем поле eventType
 }));
-
 
 
 app.post('/register', async(req, res) => {
@@ -77,20 +77,33 @@ app.post('/login', async(req, res) => {
 
 
 
-
 app.get('/events', async (req, res) => {
-  const events = await Event.find();
-  res.json(events);
+  const { eventType } = req.query;
+  let query = {};
+
+  if (eventType && eventType !== 'all') {
+    query.eventType = eventType; 
+  }
+
+  try {
+    const events = await Event.find(query); 
+    res.json(events);
+  } catch (error) {
+    res.status(500).send({ message: 'Ошибка при получении мероприятий' });
+  }
 });
 
 
 app.post('/events', async (req, res) => {
-  const { title, date, location, tasks, budget ,createdBy,img } = req.body;
-  const event = new Event({ title, date, location, tasks, budget ,createdBy , img});
-  await event.save();
-  res.status(201).json(event);
+  const { title, date, location, tasks, budget, createdBy, img, eventType } = req.body; 
+  const event = new Event({ title, date, location, tasks, budget, createdBy, img, eventType }); 
+  try {
+    await event.save();
+    res.status(201).json(event);
+  } catch (error) {
+    res.status(500).send({ message: 'Ошибка при создании мероприятия' });
+  }
 });
-
 
 
 
